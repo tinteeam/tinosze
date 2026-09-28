@@ -1,4 +1,5 @@
 const std = @import("std");
+const stdio = @import("lib/std/stdio.zig");
 
 const MULTIBOOT2_MAGIC: u32 = 0xe85250d6;
 const ARCH_X86: u32 = 0;
@@ -22,6 +23,10 @@ export fn _start() callconv(.c) noreturn {
     const vga_mem: [*]volatile u16 = @ptrFromInt(0xB8000);
 
     vga_mem[0] = 0x2F54;
+    stdio.putChar('T');
+    stdio.putChar('e');
+    stdio.putChar('s');
+    stdio.putChar('t');
 
     while (true) {
         asm volatile ("hlt");
