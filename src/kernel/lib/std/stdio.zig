@@ -1,5 +1,5 @@
 const VGA_WIDTH = 80;
-const VGA_HEIGHT = 60;
+const VGA_HEIGHT = 25;
 const DEFAULT_COLOR = 0x07;
 const BACKSPACE = 0x08;
 
@@ -30,3 +30,7 @@ pub fn putChar(c: u8) void {
         }
     }
 }
+
+//pub fn putChar(c: u8) void {
+//  vga_buffer[0] = vgaEntry(c, DEFAULT_COLOR);
+//}

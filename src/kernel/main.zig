@@ -20,13 +20,11 @@ const MultibootHeader = extern struct {
 pub export var multiboot_header: MultibootHeader linksection(".multiboot2") = .{};
 
 export fn _start() callconv(.c) noreturn {
-    const vga_mem: [*]volatile u16 = @ptrFromInt(0xB8000);
-
-    vga_mem[0] = 0x2F54;
     stdio.putChar('T');
     stdio.putChar('e');
     stdio.putChar('s');
     stdio.putChar('t');
+    stdio.putChar('\n');
 
     while (true) {
         asm volatile ("hlt");
