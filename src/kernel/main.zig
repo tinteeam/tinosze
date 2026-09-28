@@ -32,9 +32,13 @@ export fn _start() callconv(.c) noreturn {
 }
 
 pub fn panic(msg: []const u8, error_return_trace: ?*std.builtin.StackTrace, ret_addr: ?usize) noreturn {
-    _ = msg;
     _ = error_return_trace;
     _ = ret_addr;
+
+    serial.writeString("KERNEL PANIC");
+    serial.writeString("Kernel has paniced");
+
+    serial.writeString(msg);
     while (true) {
         asm volatile ("hlt");
     }
