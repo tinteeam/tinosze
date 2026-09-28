@@ -1,6 +1,7 @@
 const std = @import("std");
 const stdio = @import("lib/std/stdio.zig");
 
+var stack_bytes: [16384]u8 align(16) linksection(".bss") = undefined;
 const MULTIBOOT2_MAGIC: u32 = 0xe85250d6;
 const ARCH_X86: u32 = 0;
 const HEADER_LENGTH: u32 = @sizeOf(MultibootHeader);

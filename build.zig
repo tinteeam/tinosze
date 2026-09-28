@@ -2,15 +2,15 @@ const std = @import("std");
 
 pub fn build(b: *std.Build) void {
     const target = b.resolveTargetQuery(.{
-        .cpu_arch = .x86_64,
+        .cpu_arch = .x86,
         .os_tag = .freestanding,
         .abi = .none,
     });
 
     const optimize = b.standardOptimizeOption(.{});
 
-    const kernel = b.addExecutable(.{
-        .name = "kernel.elf",
+    const kernel_obj = b.addObject(.{
+        .name = "kernel",
         .root_module = b.createModule(.{
             .root_source_file = b.path("src/kernel/main.zig"),
             .target = target,
@@ -18,8 +18,8 @@ pub fn build(b: *std.Build) void {
         }),
     });
 
-    kernel.setLinkerScript(b.path("linker.ld"));
-    kernel.root_module.strip = false;
+    kernel_obj.root_module.code_model = .kernel;
 
-    b.installArtifact(kernel);
+    const copy_file = b.addInstallFile(kernel_obj.getEmittedBin(), "bin/kernel.o");
+    b.getInstallStep().dependOn(&copy_file.step);
 }

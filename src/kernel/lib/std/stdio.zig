@@ -5,8 +5,8 @@ const BACKSPACE = 0x08;
 
 var vga_buffer: [*]volatile u16 = @ptrFromInt(0xB8000);
 
-var cursor_x: usize = 0;
-var cursor_y: usize = 0;
+var cursor_x: u32 = 0;
+var cursor_y: u32 = 0;
 
 fn vgaEntry(c: u8, color: u8) u16 {
     return (@as(u16, color) << 8) | @as(u16, c);
