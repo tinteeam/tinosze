@@ -1,0 +1,14 @@
+# Exclude the zig cache
+.zig-cache/
+
+# Exclude all posible build outputs
+bin/
+build/
+out/
+zig-out/
+
+# Exclude all of the packages
+zig-pkg/
+
+# ISO files / root
+iso_root/
