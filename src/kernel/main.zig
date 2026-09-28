@@ -1,63 +1,27 @@
 const std = @import("std");
 
-// --- NATIVE ZIG LIMINE PROTOCOL DEFINITIONS ---
-const LIMINE_COMMON_MAGIC: [4]u64 = .{ 0xc7b1dd30fa322e2e, 0x10a82747b1dd322e, 0x8cc466a0da217585, 0xbcab24c678a30d22 };
-pub const LIMINE_FRAMEBUFFER_REQUEST: [4]u64 = .{ LIMINE_COMMON_MAGIC[0], LIMINE_COMMON_MAGIC[1], 0x671d432c52244c9d, 0x541251df3b6658ae };
+const MULTIBOOT2_MAGIC: u32 = 0xe85250d6;
+const ARCH_X86: u32 = 0;
+const HEADER_LENGTH: u32 = @sizeOf(MultibootHeader);
 
-pub const LimineFramebuffer = extern struct {
-    address: ?[*]u32,
-    width: u64,
-    height: u64,
-    pitch: u64,
-    bpp: u16,
-    memory_model: u8,
-    red_mask_size: u8,
-    red_mask_shift: u8,
-    green_mask_size: u8,
-    green_mask_shift: u8,
-    blue_mask_size: u8,
-    blue_mask_shift: u8,
-    unused: [7]u8,
+const CHECKSUM: u32 = -%(MULTIBOOT2_MAGIC + ARCH_X86 + HEADER_LENGTH);
+
+const MultibootHeader = extern struct {
+    magic: u32 = MULTIBOOT2_MAGIC,
+    architecture: u32 = ARCH_X86,
+    header_length: u32 = HEADER_LENGTH,
+    checksum: u32 = CHECKSUM,
+    type_end: u16 = 0,
+    flags_end: u16 = 0,
+    size_end: u32 = 8,
 };
 
-pub const LimineFramebufferResponse = extern struct {
-    revision: u64,
-    framebuffer_count: u64,
-    framebuffers: [*]const *LimineFramebuffer,
-};
-
-pub const LimineFramebufferRequest = extern struct {
-    id: [4]u64,
-    revision: u64,
-    response: ?*LimineFramebufferResponse,
-};
-// --- END OF PROTOCOL DEFINITIONS ---
-
-// Pin our request struct securely into the higher-half linker section
-pub export var framebuffer_request: LimineFramebufferRequest linksection(".limine_requests") = .{
-    .id = LIMINE_FRAMEBUFFER_REQUEST,
-    .revision = 0,
-    .response = null,
-};
+pub export var multiboot_header: MultibootHeader linksection(".multiboot2") = .{};
 
 export fn _start() callconv(.c) noreturn {
-    if (framebuffer_request.response) |response| {
-        if (response.framebuffer_count > 0) {
-            const fb = response.framebuffers[0];
-            if (fb.address) |fb_address| {
-                // Render our red calibration box (150x150 pixels)
-                var y: u32 = 0;
-                while (y < 150) : (y += 1) {
-                    var x: u32 = 0;
-                    while (x < 150) : (x += 1) {
-                        const stride = fb.pitch / 4;
-                        const index = (y * stride) + x;
-                        fb_address[index] = 0x00FF0000; // Solid Red
-                    }
-                }
-            }
-        }
-    }
+    const vga_mem: [*]volatile u16 = @ptrFromInt(0xB8000);
+
+    vga_mem[0] = 0x2F54;
 
     while (true) {
         asm volatile ("hlt");

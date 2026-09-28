@@ -1,27 +1,17 @@
 #!/bin/bash
 set -e
 
-echo "[1/4] Compiling Zig-kernel (Zig 0.17.0)..."
+echo "[1/3] Compiling Zig-kernel..."
 zig build
 
-echo "[2/4] Creating a empty 64MB disk image..."
-rm -f tinosze.img
-dd if=/dev/zero of=tinosze.img bs=1M count=64
-
-echo "[3/4] Creating MBR-partition table and initializing FAT32..."
-
-printf "label: dos\nlabel-id: 0x12345678\ndevice: tinosze.img\nunit: sectors\n\ntinosze.img1 : start=2048, type=0c, bootable\n" | sfdisk tinosze.img
-
-mformat -i tinosze.img@@1M -F
-
-mmd -i tinosze.img@@1M ::/boot
-
-mcopy -i tinosze.img@@1M ./zig-out/bin/kernel.elf ::/boot/kernel.elf
-mcopy -i tinosze.img@@1M ./Bootloader/limine.conf ::/limine.conf
+echo "[2/3] Building ISO-folder Structure..."
+rm -rf iso_root tinos3c.iso
+mkdir -p iso_root/boot/grub
 
 
-mcopy -i tinosze.img@@1M /usr/local/share/limine/limine-bios.sys ::/limine-bios.sys
+cp ./zig-out/bin/kernel.elf ./iso_root/boot/kernel.elf
+cp ./Bootloader/grub.cfg ./iso_root/boot/grub/grub.cfg
 
-echo "[4/4] Installing Limine-bootsectors to the disk image..."
-
-limine bios-install tinosze.img
+echo "[3/3] Creating Bootable GRUB ISO-image..."
+grub-file --is-x86-multiboot2 ./iso_root/boot/kernel.elf
+grub-mkrescue -o tinosze.iso iso_root
