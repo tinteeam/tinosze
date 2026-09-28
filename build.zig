@@ -19,6 +19,9 @@ pub fn build(b: *std.Build) void {
     });
 
     kernel.setLinkerScript(b.path("linker.ld"));
+
+    // FIX: Enforce higher-half relative addressing modes
+    kernel.root_module.code_model = .kernel;
     kernel.root_module.strip = false;
 
     b.installArtifact(kernel);

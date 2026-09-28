@@ -12,3 +12,5 @@ zig-pkg/
 
 # ISO files / root
 iso_root/
+
+*.img
