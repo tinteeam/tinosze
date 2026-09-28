@@ -1,5 +1,6 @@
 const std = @import("std");
 const stdio = @import("lib/std/stdio.zig");
+const serial = @import("serial.zig");
 
 var stack_bytes: [16384]u8 align(16) linksection(".bss") = undefined;
 const MULTIBOOT2_MAGIC: u32 = 0xe85250d6;
@@ -21,6 +22,8 @@ const MultibootHeader = extern struct {
 pub export var multiboot_header: MultibootHeader linksection(".multiboot2") = .{};
 
 export fn _start() callconv(.c) noreturn {
+    serial.init();
+    serial.writeString("TinosZE Serial print TEST!");
     stdio.kprint("TinosZE print TEST!");
 
     while (true) {
