@@ -1,6 +1,7 @@
 const std = @import("std");
 const stdio = @import("lib/std/stdio.zig");
 const serial = @import("serial.zig");
+const sconsole = @import("sconsole.zig");
 
 var stack_bytes: [16384]u8 align(16) linksection(".bss") = undefined;
 const MULTIBOOT2_MAGIC: u32 = 0xe85250d6;
@@ -26,8 +27,13 @@ export fn _start() callconv(.c) noreturn {
     serial.writeString("TinosZE Serial print TEST!");
     stdio.kprint("TinosZE print TEST!");
 
+    serial.writeString("====================================\n");
+    serial.writeString(" Welcome to TinosZE Serial Console! \n");
+    serial.writeString("====================================\n");
+    serial.writeString("> ");
+
     while (true) {
-        asm volatile ("hlt");
+        sconsole.runIteration();
     }
 }
 

@@ -25,3 +25,21 @@ pub fn writeString(str: []const u8) void {
     }
     writeByte('\n');
 }
+
+fn isReadReady() bool {
+    return (stdio.inb(COM1 + 5) & 0x01) != 0;
+}
+
+pub fn readChar() u8 {
+    while (!isReadReady()) {
+        asm volatile ("pause");
+    }
+    return stdio.inb(COM1);
+}
+
+pub fn checkChar() ?u8 {
+    if (isReadReady()) {
+        return stdio.inb(COM1);
+    }
+    return null;
+}
