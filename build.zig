@@ -9,8 +9,8 @@ pub fn build(b: *std.Build) void {
 
     const optimize = b.standardOptimizeOption(.{});
 
-    const kernel = b.addExecutable(.{
-        .name = "kernel.elf",
+    const kernel_obj = b.addObject(.{
+        .name = "kernel.o",
         .root_module = b.createModule(.{
             .root_source_file = b.path("src/kernel/main.zig"),
             .target = target,
@@ -18,11 +18,9 @@ pub fn build(b: *std.Build) void {
         }),
     });
 
-    kernel.setLinkerScript(b.path("linker.ld"));
+    kernel_obj.root_module.code_model = .kernel;
+    kernel_obj.root_module.strip = false;
 
-    // FIX: Enforce higher-half relative addressing modes
-    kernel.root_module.code_model = .kernel;
-    kernel.root_module.strip = false;
-
-    b.installArtifact(kernel);
+    const install_file = b.addInstallFile(kernel_obj.getEmittedBin(), "bin/kernel.o");
+    b.getInstallStep().dependOn(&install_file.step);
 }
