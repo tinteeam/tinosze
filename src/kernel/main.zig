@@ -21,11 +21,7 @@ const MultibootHeader = extern struct {
 pub export var multiboot_header: MultibootHeader linksection(".multiboot2") = .{};
 
 export fn _start() callconv(.c) noreturn {
-    stdio.putChar('T');
-    stdio.putChar('e');
-    stdio.putChar('s');
-    stdio.putChar('t');
-    stdio.putChar('\n');
+    stdio.kprint("TinosZE print TEST!");
 
     while (true) {
         asm volatile ("hlt");
