@@ -1,6 +1,7 @@
 const std = @import("std");
 const serial = @import("serial.zig");
 const stdio = @import("lib/std/stdio.zig");
+const utilityCmds = @import("commands/utilitycommands.zig");
 
 var cmd_buffer: [64]u8 = undefined;
 var cmd_len: usize = 0;
@@ -45,6 +46,8 @@ fn executeCommand(cmd: []const u8) void {
         while (true) {
             asm volatile ("cli; hlt");
         }
+    } else if (std.mem.eql(u8, cmd, "ver")) {
+        utilityCmds.verCmd();
     } else {
         serial.writeString("Unknown command. Type 'help' for options.\n");
     }
