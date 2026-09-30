@@ -1,6 +1,7 @@
 const std = @import("std");
 const stdio = @import("lib/std/stdio.zig");
 const serial = @import("serial.zig");
+const sconsole = @import("sconsole.zig");
 
 var stack_bytes: [16384]u8 align(16) linksection(".bss") = undefined;
 const MULTIBOOT2_MAGIC: u32 = 0xe85250d6;
@@ -26,8 +27,13 @@ export fn _start() callconv(.c) noreturn {
     serial.writeString("TinosZE Serial print TEST!");
     stdio.kprint("TinosZE print TEST!");
 
+    serial.writeString("====================================\n");
+    serial.writeString(" Welcome to TinosZE Serial Console! \n");
+    serial.writeString("====================================\n");
+    serial.writeString("> ");
+
     while (true) {
-        asm volatile ("hlt");
+        sconsole.runIteration();
     }
 }
 
@@ -42,4 +48,42 @@ pub fn panic(msg: []const u8, error_return_trace: ?*std.builtin.StackTrace, ret_
     while (true) {
         asm volatile ("hlt");
     }
+}
+
+pub export fn memset(s: [*]u8, c: i32, n: usize) callconv(.c) [*]u8 {
+    var i: usize = 0;
+    while (i < n) : (i += 1) {
+        s[i] = @intCast(c & 0xFF);
+    }
+    return s;
+}
+
+pub export fn memcpy(dest: [*]u8, src: [*]const u8, n: usize) callconv(.c) [*]u8 {
+    var i: usize = 0;
+    while (i < n) : (i += 1) {
+        dest[i] = src[i];
+    }
+    return dest;
+}
+
+pub export fn memmove(dest: [*]u8, src: [*]const u8, n: usize) callconv(.c) [*]u8 {
+    if (@intFromPtr(dest) < @intFromPtr(src)) {
+        var i: usize = 0;
+        while (i < n) : (i += 1) {
+            dest[i] = src[i];
+        }
+    } else {
+        var i: usize = n;
+        while (i > 0) {
+            i -= 1;
+            dest[i] = src[i];
+        }
+    }
+    return dest;
+}
+
+pub export fn __zig_probe_stack() callconv(.naked) void {
+    asm volatile (
+        \\ret
+    );
 }
