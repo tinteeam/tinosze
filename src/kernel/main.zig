@@ -2,6 +2,7 @@ const std = @import("std");
 const stdio = @import("lib/std/stdio.zig");
 const serial = @import("serial.zig");
 const sconsole = @import("sconsole.zig");
+const tmpconsole = @import("console/tmpconsole.zig");
 
 var stack_bytes: [16384]u8 align(16) linksection(".bss") = undefined;
 const MULTIBOOT2_MAGIC: u32 = 0xe85250d6;
@@ -33,6 +34,7 @@ export fn _start() callconv(.c) noreturn {
     serial.writeString("> ");
 
     while (true) {
+        tmpconsole.tempconsole();
         sconsole.runIteration();
     }
 }
