@@ -37,7 +37,7 @@ pub fn runIteration() void {
 fn executeCommand(cmd: []const u8) void {
     if (std.mem.eql(u8, cmd, "help")) {
         serial.writeString("TinosZE Debug Console v0.1\n");
-        serial.writeString("Available commands: help, ping, halt\n");
+        serial.writeString("Available commands: help, ping, halt, ver\n");
     } else if (std.mem.eql(u8, cmd, "ping")) {
         serial.writeString("PONG! Kernel is alive and kicking.\n");
     } else if (std.mem.eql(u8, cmd, "halt")) {
