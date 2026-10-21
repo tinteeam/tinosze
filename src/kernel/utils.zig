@@ -1,3 +1,3 @@
-pub fn osVersion() *const [11:0]u8 {
-    return "v0.1-alpha2";
+pub fn osVersion() []const u8 {
+    return "0.1 alpha";
 }

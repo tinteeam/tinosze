@@ -1,7 +1,7 @@
 const stdio = @import("../lib/std/stdio.zig");
 const kb = @import("../drivers/keyboard/kb.zig");
 
-pub fn tempconsole() void {
+pub fn run() void {
     var buffer: [128:0]u8 = undefined;
     var pos: usize = 0;
 
@@ -22,8 +22,9 @@ pub fn tempconsole() void {
 
             stdio.kprint("\n");
 
-            if (stdio.strcmp(buffer[0..pos :0], "test") == 0) {
-                stdio.kprint("TEST");
+            if (stdio.strcmp(buffer[0..pos :0], "ver") == 0) {
+                stdio.kprint("TinosZE version: 0.1 alpha");
+                stdio.kprint("Zig version: 0.16.0");
             }
 
             pos = 0;
