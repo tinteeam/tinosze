@@ -44,10 +44,11 @@ pub export fn kernel_main() noreturn {
     serial.writeString(" Welcome to TinosZE Serial Console! \n");
     serial.writeString("====================================\n");
     serial.writeString("> ");
+    stdio.kprint("Type 'help' for a list of commands.\n");
 
     while (true) {
         console.run();
-        sconsole.runIteration();
+        sconsole.runIteration(); // Sadly this serial console is getting blocked by console since console has a while(true) loop, so we need to run it in iterations to allow the serial console to work.
     }
 }
 
