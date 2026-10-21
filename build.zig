@@ -3,6 +3,7 @@ const std = @import("std");
 pub fn build(b: *std.Build) void {
     const target = b.resolveTargetQuery(.{
         .cpu_arch = .x86,
+        .cpu_model = .{ .explicit = &std.Target.x86.cpu.i386 },
         .os_tag = .freestanding,
         .abi = .none,
     });

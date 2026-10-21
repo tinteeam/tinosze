@@ -23,5 +23,9 @@ pub fn readChar() u8 {
         return 0;
     }
 
+    if (sc >= scancodeTable.len) {
+        return 0;
+    }
+
     return scancodeTable[sc];
 }

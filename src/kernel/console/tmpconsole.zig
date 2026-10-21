@@ -22,13 +22,13 @@ pub fn tempconsole() void {
 
             stdio.kprint("\n");
 
-            if (stdio.strcmp(&buffer, "test") == 0) {
+            if (stdio.strcmp(buffer[0..pos :0], "test") == 0) {
                 stdio.kprint("TEST");
             }
 
             pos = 0;
             buffer[0] = 0;
-        } else if (pos < buffer.len - 1) {
+        } else if (c != 0 and pos < buffer.len - 1) {
             buffer[pos] = c;
             pos += 1;
             buffer[pos] = 0;
