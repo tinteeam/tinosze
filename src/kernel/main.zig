@@ -2,8 +2,9 @@ const std = @import("std");
 const stdio = @import("lib/std/stdio.zig");
 const serial = @import("serial.zig");
 const sconsole = @import("sconsole.zig");
+const console = @import("console/console.zig");
 
-var stack_bytes: [16384]u8 align(16) linksection(".bss") = undefined;
+pub export var stack_bytes: [16384]u8 align(16) linksection(".bss") = undefined;
 const MULTIBOOT2_MAGIC: u32 = 0xe85250d6;
 const ARCH_X86: u32 = 0;
 const HEADER_LENGTH: u32 = @sizeOf(MultibootHeader);
@@ -22,7 +23,19 @@ const MultibootHeader = extern struct {
 
 pub export var multiboot_header: MultibootHeader linksection(".multiboot2") = .{};
 
-export fn _start() callconv(.c) noreturn {
+export fn _start() callconv(.naked) noreturn {
+    asm volatile (
+        \\movl $stack_bytes + 16384, %esp
+        \\andl $-16, %esp
+        \\call kernel_main
+        \\cli
+        \\1:
+        \\hlt
+        \\jmp 1b
+    );
+}
+
+pub export fn kernel_main() noreturn {
     serial.init();
     serial.writeString("TinosZE Serial print TEST!");
     stdio.kprint("TinosZE print TEST!");
@@ -33,6 +46,7 @@ export fn _start() callconv(.c) noreturn {
     serial.writeString("> ");
 
     while (true) {
+        console.run();
         sconsole.runIteration();
     }
 }

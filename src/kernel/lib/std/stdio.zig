@@ -1,7 +1,7 @@
 const VGA_WIDTH = 80;
 const VGA_HEIGHT = 25;
 const DEFAULT_COLOR = 0x07;
-const BACKSPACE = 0x08;
+pub const BACKSPACE = 0x08;
 
 var vga_buffer: [*]volatile u16 = @ptrFromInt(0xB8000);
 
@@ -97,4 +97,16 @@ pub fn kprint(str: []const u8) void {
         putChar(c);
     }
     putChar('\n');
+}
+
+pub fn strcmp(s1: [*:0]const u8, s2: [*:0]const u8) i32 {
+    var p1 = s1;
+    var p2 = s2;
+
+    while (p1[0] != 0 and p1[0] == p2[0]) {
+        p1 += 1;
+        p2 += 1;
+    }
+
+    return @as(i32, p1[0]) - @as(i32, p2[0]);
 }
