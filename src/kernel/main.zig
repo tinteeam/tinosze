@@ -38,6 +38,7 @@ export fn _start() callconv(.naked) noreturn {
 pub export fn kernel_main() noreturn {
     serial.init();
     pmm.pmmInit();
+    @import("SysInit.zig").memInit();
     serial.writeString("TinosZE Serial print TEST!");
     stdio.kprint("TinosZE print TEST!");
 

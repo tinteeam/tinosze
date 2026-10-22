@@ -11,17 +11,20 @@ var free_pages: u64 linksection(".data.boot") = 0;
 
 pub fn setPage(page: u64) void {
     const bit: u3 = @intCast(page % 8);
-    bitmap[page / 8] |= (@as(u8, 1) << bit);
+    const idx: usize = @intCast(page / 8);
+    bitmap[idx] |= (@as(u8, 1) << bit);
 }
 
 pub fn clearPage(page: u64) void {
     const bit: u3 = @intCast(page % 8);
-    bitmap[page / 8] &= ~(@as(u8, 1) << bit);
+    const idx: usize = @intCast(page / 8);
+    bitmap[idx] &= ~(@as(u8, 1) << bit);
 }
 
 pub fn pageUsed(page: u64) bool {
     const bit: u3 = @intCast(page % 8);
-    return (bitmap[page / 8] & (@as(u8, 1) << bit)) != 0;
+    const idx: usize = @intCast(page / 8);
+    return (bitmap[idx] & (@as(u8, 1) << bit)) != 0;
 }
 
 pub fn pmmInit() void {
