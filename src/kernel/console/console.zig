@@ -24,28 +24,29 @@ pub fn run() void {
             stdio.kprint("\n");
 
             if (stdio.strcmp(buffer[0..pos :0], "ver") == 0) {
-                stdio.kprint("TinosZE version: ");
-                stdio.kprint(@import("../utils/VersionUtils.zig").GetOsVersion());
+                stdio.kprintln("TinosZE version: ");
+                stdio.kprintln(@import("../utils/VersionUtils.zig").GetOsVersion());
 
-                stdio.kprint("Zig version: ");
-                stdio.kprint(@import("../utils/VersionUtils.zig").GetZigVersion());
+                stdio.kprintln("Zig version: ");
+                stdio.kprintln(@import("../utils/VersionUtils.zig").GetZigVersion());
 
-                stdio.kprint("Serial driver version: ");
-                stdio.kprint(@import("../utils/VersionUtils.zig").GetSerialDriverVersion());
+                stdio.kprintln("Serial driver version: ");
+                stdio.kprintln(@import("../utils/VersionUtils.zig").GetSerialDriverVersion());
 
-                stdio.kprint("Keyboard driver version: ");
-                stdio.kprint(@import("../utils/VersionUtils.zig").GetKeyboardDriverVersion());
+                stdio.kprintln("Keyboard driver version: ");
+                stdio.kprintln(@import("../utils/VersionUtils.zig").GetKeyboardDriverVersion());
 
-                stdio.kprint("Physical Memory Manager version: ");
-                stdio.kprint(@import("../utils/VersionUtils.zig").GetPmmVersion());
+                stdio.kprintln("Physical Memory Manager version: ");
+                stdio.kprintln(@import("../utils/VersionUtils.zig").GetPmmVersion());
 
-                stdio.kprint("Virtual Memory Manager version: ");
-                stdio.kprint(@import("../utils/VersionUtils.zig").GetVmmVersion());
+                stdio.kprintln("Virtual Memory Manager version: ");
+                stdio.kprintln(@import("../utils/VersionUtils.zig").GetVmmVersion());
             } else if (stdio.strcmp(buffer[0..pos :0], "help") == 0) {
-                stdio.kprint("Available commands:");
-                stdio.kprint("ver - Show version information");
-                stdio.kprint("help - Show this help message");
-                stdio.kprint("hlt - Halt the system");
+                stdio.kprintln("Available commands:");
+                stdio.kprintln("ver - Show version information");
+                stdio.kprintln("help - Show this help message");
+                stdio.kprintln("hlt - Halt the system");
+                stdio.kprintln("meminfo - Show memory information");
             } else if (stdio.strcmp(buffer[0..pos :0], "hlt") == 0) {
                 stdio.kprint("Halting the system...");
                 @import("../serial.zig").writeString("System is halting...");

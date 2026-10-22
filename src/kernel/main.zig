@@ -5,6 +5,10 @@ const console = @import("console/console.zig");
 const pmm = @import("mm/pmm.zig");
 
 pub export var stack_bytes: [16384]u8 align(16) linksection(".bss") = undefined;
+pub export var pml4_table: [512]u64 align(4096) linksection(".bss") = [_]u64{0} ** 512;
+pub export var pdpt_table: [512]u64 align(4096) linksection(".bss") = [_]u64{0} ** 512;
+pub export var pd_table: [512]u64 align(4096) linksection(".bss") = [_]u64{0} ** 512;
+
 const MULTIBOOT2_MAGIC: u32 = 0xe85250d6;
 const ARCH_X86: u32 = 0;
 const HEADER_LENGTH: u32 = @sizeOf(MultibootHeader);
@@ -23,20 +27,6 @@ const MultibootHeader = extern struct {
 };
 
 pub export var multiboot_header: MultibootHeader linksection(".multiboot2") = .{};
-
-export fn _start() callconv(.naked) noreturn {
-    asm volatile (
-        \\movl $stack_bytes + 16384, %esp
-        \\andl $-16, %esp
-        \\pushl %ebx
-        \\pushl %eax
-        \\call kernel_main
-        \\cli
-        \\1:
-        \\hlt
-        \\jmp 1b
-    );
-}
 
 pub export fn kernel_main(magic: u32, mboot_info: *anyopaque) callconv(.c) noreturn {
     serial.init();

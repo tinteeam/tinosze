@@ -7,7 +7,7 @@ pub fn meminfo() void {
     const used: u64 = total - free;
 
     if (total == 0) {
-        stdio.kprint("Memory Information unavailable: no pages detected");
+        stdio.kprintln("Memory Information unavailable: no pages detected");
         return;
     }
 
