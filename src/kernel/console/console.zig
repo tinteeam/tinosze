@@ -52,6 +52,8 @@ pub fn run() void {
                 while (true) {
                     asm volatile ("cli; hlt");
                 }
+            } else if (stdio.strcmp(buffer[0..pos :0], "meminfo") == 0) {
+                @import("../commands/meminfo.zig").meminfo();
             } else {
                 if (pos > 0) {
                     stdio.kprint("Unknown command: ");

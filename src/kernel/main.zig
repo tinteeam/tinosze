@@ -110,3 +110,25 @@ pub export fn __zig_probe_stack() callconv(.naked) void {
         \\ret
     );
 }
+
+pub export fn __udivdi3(dividend: u64, divisor: u64) callconv(.c) u64 {
+    if (divisor == 0) {
+        @panic("division by zero");
+    }
+
+    var quotient: u64 = 0;
+    var remainder: u64 = 0;
+    var bit: u7 = 64;
+
+    while (bit > 0) {
+        bit -= 1;
+        const shift: u6 = @intCast(bit);
+        remainder = (remainder << 1) | ((dividend >> shift) & 1);
+        if (remainder >= divisor) {
+            remainder -= divisor;
+            quotient |= @as(u64, 1) << shift;
+        }
+    }
+
+    return quotient;
+}
