@@ -21,5 +21,5 @@ pub fn GetPmmVersion() []const u8 {
 }
 
 pub fn GetVmmVersion() []const u8 {
-    return "NOT IMPLEMENTED, Coming soon!";
+    return "0.1 alpha DEV1";
 }
