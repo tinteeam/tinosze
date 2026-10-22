@@ -1,7 +1,7 @@
 const stdio = @import("../lib/std/stdio.zig");
 
 pub fn GetOsVersion() []const u8 {
-    return "0.1 alpha3 DEV1";
+    return "0.1 alpha3";
 }
 
 pub fn GetZigVersion() []const u8 {
@@ -21,5 +21,5 @@ pub fn GetPmmVersion() []const u8 {
 }
 
 pub fn GetVmmVersion() []const u8 {
-    return "0.1 alpha DEV1";
+    return "0.1 alpha";
 }
