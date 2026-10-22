@@ -2,8 +2,8 @@ const std = @import("std");
 
 pub fn build(b: *std.Build) void {
     const target = b.resolveTargetQuery(.{
-        .cpu_arch = .x86,
-        .cpu_model = .{ .explicit = &std.Target.x86.cpu.i386 },
+        .cpu_arch = .x86_64,
+        .cpu_model = .{ .explicit = &std.Target.x86.cpu.x86_64 },
         .os_tag = .freestanding,
         .abi = .none,
     });
@@ -18,6 +18,7 @@ pub fn build(b: *std.Build) void {
             .optimize = optimize,
         }),
     });
+    kernel_obj.root_module.addAssemblyFile(b.path("src/kernel/boot.S"));
 
     kernel_obj.root_module.code_model = .kernel;
 

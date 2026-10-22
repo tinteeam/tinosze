@@ -5,6 +5,10 @@ SECTIONS
     . = 0x100000;
     kernel_start = .;
 
+    .boot_gdt 0x10f000 : {
+        KEEP(*(.boot_gdt))
+    }
+
     .text : ALIGN(4K) {
         KEEP(*(.multiboot2))
         *(.text .text.*)
