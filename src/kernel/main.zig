@@ -1,7 +1,6 @@
 const std = @import("std");
 const stdio = @import("lib/std/stdio.zig");
 const serial = @import("serial.zig");
-const sconsole = @import("sconsole.zig");
 const console = @import("console/console.zig");
 
 pub export var stack_bytes: [16384]u8 align(16) linksection(".bss") = undefined;
@@ -40,15 +39,10 @@ pub export fn kernel_main() noreturn {
     serial.writeString("TinosZE Serial print TEST!");
     stdio.kprint("TinosZE print TEST!");
 
-    serial.writeString("====================================\n");
-    serial.writeString(" Welcome to TinosZE Serial Console! \n");
-    serial.writeString("====================================\n");
-    serial.writeString("> ");
     stdio.kprint("Type 'help' for a list of commands.\n");
 
     while (true) {
         console.run();
-        sconsole.runIteration(); // Sadly this serial console is getting blocked by console since console has a while(true) loop, so we need to run it in iterations to allow the serial console to work.
     }
 }
 

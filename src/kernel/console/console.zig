@@ -24,12 +24,25 @@ pub fn run() void {
             stdio.kprint("\n");
 
             if (stdio.strcmp(buffer[0..pos :0], "ver") == 0) {
-                stdio.kprint("TinosZE version: 0.1 alpha");
-                stdio.kprint("Zig version: 0.16.0");
+                stdio.kprint("TinosZE version: ");
+                stdio.kprint(@import("../utils/VersionUtils.zig").GetOsVersion());
+                stdio.kprint("Zig version: ");
+                stdio.kprint(@import("../utils/VersionUtils.zig").GetZigVersion());
+                stdio.kprint("Serial driver version: ");
+                stdio.kprint(@import("../utils/VersionUtils.zig").GetSerialDriverVersion());
+                stdio.kprint("Keyboard driver version: ");
+                stdio.kprint(@import("../utils/VersionUtils.zig").GetKeyboardDriverVersion());
             } else if (stdio.strcmp(buffer[0..pos :0], "help") == 0) {
                 stdio.kprint("Available commands:");
                 stdio.kprint("ver - Show version information");
                 stdio.kprint("help - Show this help message");
+                stdio.kprint("hlt - Halt the system");
+            } else if (stdio.strcmp(buffer[0..pos :0], "hlt") == 0) {
+                stdio.kprint("Halting the system...");
+                @import("../serial.zig").writeString("System is halting...");
+                while (true) {
+                    asm volatile ("cli; hlt");
+                }
             } else {
                 stdio.kprint("Unknown command: ");
                 stdio.kprint(buffer[0..pos :0]);
