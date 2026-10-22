@@ -71,7 +71,7 @@ pub fn memInit() void {
 
     pmm.pmmReserveRegion(start, kernel_size);
 
-    stdio.kprint("Usable memory:");
+    stdio.kprint("Usable memory: ");
     stdio.printU64(total_memory / (1024 * 1024));
     stdio.kprint(" MiB\n");
 
