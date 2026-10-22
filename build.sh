@@ -14,6 +14,6 @@ mkdir -p iso_root/boot/grub
 cp ./zig-out/bin/kernel.elf ./iso_root/boot/kernel.elf
 cp ./Bootloader/grub.cfg ./iso_root/boot/grub/grub.cfg
 
-echo "[3/4] Creating Bootable GRUB ISO-image..."
+echo "[4/4] Creating Bootable GRUB ISO-image..."
 grub-file --is-x86-multiboot2 ./iso_root/boot/kernel.elf
 grub-mkrescue -o tinosze.iso iso_root
