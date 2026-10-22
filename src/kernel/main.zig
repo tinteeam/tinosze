@@ -10,6 +10,7 @@ const ARCH_X86: u32 = 0;
 const HEADER_LENGTH: u32 = @sizeOf(MultibootHeader);
 
 const CHECKSUM: u32 = -%(MULTIBOOT2_MAGIC + ARCH_X86 + HEADER_LENGTH);
+const MULTIBOOT2_BOOTLOADER_MAGIC: u32 = 0x36d76289;
 
 const MultibootHeader = extern struct {
     magic: u32 = MULTIBOOT2_MAGIC,
@@ -27,6 +28,8 @@ export fn _start() callconv(.naked) noreturn {
     asm volatile (
         \\movl $stack_bytes + 16384, %esp
         \\andl $-16, %esp
+        \\pushl %ebx
+        \\pushl %eax
         \\call kernel_main
         \\cli
         \\1:
@@ -35,12 +38,20 @@ export fn _start() callconv(.naked) noreturn {
     );
 }
 
-pub export fn kernel_main() noreturn {
+pub export fn kernel_main(magic: u32, mboot_info: *anyopaque) callconv(.c) noreturn {
     serial.init();
+
     pmm.pmmInit();
+
+    if (magic == MULTIBOOT2_BOOTLOADER_MAGIC) {
+        @import("SysInit.zig").detectMem(mboot_info);
+    } else {
+        stdio.kprint("[BOOT] Invalid Multiboot2 magic\n");
+    }
+
     @import("SysInit.zig").memInit();
+
     serial.writeString("TinosZE Serial print TEST!");
-    stdio.kprint("TinosZE print TEST!");
 
     stdio.kprint("Type 'help' for a list of commands.\n");
 
