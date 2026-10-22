@@ -44,12 +44,16 @@ pub fn run() void {
                     asm volatile ("cli; hlt");
                 }
             } else {
-                stdio.kprint("Unknown command: ");
-                stdio.kprint(buffer[0..pos :0]);
+                if (pos > 0) {
+                    stdio.kprint("Unknown command: ");
+                    stdio.kprint(buffer[0..pos :0]);
+                }
             }
 
             pos = 0;
             buffer[0] = 0;
+
+            stdio.putChar('>');
         } else if (c != 0 and pos < buffer.len - 1) {
             buffer[pos] = c;
             pos += 1;
