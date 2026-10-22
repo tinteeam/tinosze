@@ -1,5 +1,6 @@
 const stdio = @import("lib/std/stdio.zig");
 const pmm = @import("mm/pmm.zig");
+const vmm = @import("mm/vmm.zig");
 
 extern var kernel_start: anyopaque;
 extern var kernel_end: anyopaque;
@@ -73,5 +74,8 @@ pub fn memInit() void {
     stdio.kprint("Usable memory:");
     stdio.printU64(total_memory / (1024 * 1024));
     stdio.kprint(" MiB\n");
+
+    vmm.vmmInit();
+
     stdio.kprint("[PMM] Kernel memory space reserved successfully!\n");
 }
