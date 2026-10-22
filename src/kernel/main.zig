@@ -2,6 +2,7 @@ const std = @import("std");
 const stdio = @import("lib/std/stdio.zig");
 const serial = @import("serial.zig");
 const console = @import("console/console.zig");
+const pmm = @import("mm/pmm.zig");
 
 pub export var stack_bytes: [16384]u8 align(16) linksection(".bss") = undefined;
 const MULTIBOOT2_MAGIC: u32 = 0xe85250d6;
@@ -36,6 +37,7 @@ export fn _start() callconv(.naked) noreturn {
 
 pub export fn kernel_main() noreturn {
     serial.init();
+    pmm.pmmInit();
     serial.writeString("TinosZE Serial print TEST!");
     stdio.kprint("TinosZE print TEST!");
 

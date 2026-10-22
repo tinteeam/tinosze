@@ -26,12 +26,21 @@ pub fn run() void {
             if (stdio.strcmp(buffer[0..pos :0], "ver") == 0) {
                 stdio.kprint("TinosZE version: ");
                 stdio.kprint(@import("../utils/VersionUtils.zig").GetOsVersion());
+
                 stdio.kprint("Zig version: ");
                 stdio.kprint(@import("../utils/VersionUtils.zig").GetZigVersion());
+
                 stdio.kprint("Serial driver version: ");
                 stdio.kprint(@import("../utils/VersionUtils.zig").GetSerialDriverVersion());
+
                 stdio.kprint("Keyboard driver version: ");
                 stdio.kprint(@import("../utils/VersionUtils.zig").GetKeyboardDriverVersion());
+
+                stdio.kprint("Physical Memory Manager version: ");
+                stdio.kprint(@import("../utils/VersionUtils.zig").GetPmmVersion());
+
+                stdio.kprint("Virtual Memory Manager version: ");
+                stdio.kprint(@import("../utils/VersionUtils.zig").GetVmmVersion());
             } else if (stdio.strcmp(buffer[0..pos :0], "help") == 0) {
                 stdio.kprint("Available commands:");
                 stdio.kprint("ver - Show version information");
