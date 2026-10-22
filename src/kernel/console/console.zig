@@ -58,7 +58,7 @@ pub fn run() void {
             } else {
                 if (pos > 0) {
                     stdio.kprint("Unknown command: ");
-                    stdio.kprint(buffer[0..pos :0]);
+                    stdio.kprintln(buffer[0..pos :0]);
                 }
             }
 

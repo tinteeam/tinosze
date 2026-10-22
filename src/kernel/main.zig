@@ -41,7 +41,7 @@ pub export fn kernel_main(magic: u32, mboot_info: *anyopaque) callconv(.c) noret
 
     @import("SysInit.zig").memInit();
 
-    serial.writeString("TinosZE Serial print TEST!");
+    @import("utils/SerialVersionOut.zig").VersionToSerialOutput(true);
 
     stdio.kprint("Type 'help' for a list of commands.\n");
 
@@ -57,6 +57,8 @@ pub fn panic(msg: []const u8, error_return_trace: ?*std.builtin.StackTrace, ret_
     serial.writeString("KERNEL PANIC");
     serial.writeString("Kernel has paniced");
 
+    serial.writeString("Kernel version info:  ");
+    @import("utils/SerialVersionOut.zig").VersionToSerialOutput(false);
     serial.writeString(msg);
     while (true) {
         asm volatile ("hlt");
