@@ -96,7 +96,27 @@ pub fn kprint(str: []const u8) void {
     for (str) |c| {
         putChar(c);
     }
-    putChar('\n');
+}
+
+pub fn printU64(value: u64) void {
+    var buffer: [20]u8 = undefined;
+    var index = buffer.len;
+    var number = value;
+
+    if (number == 0) {
+        putChar('0');
+        return;
+    }
+
+    while (number > 0) {
+        index -= 1;
+        buffer[index] = '0' + @as(u8, @intCast(number % 10));
+        number /= 10;
+    }
+
+    for (buffer[index..]) |c| {
+        putChar(c);
+    }
 }
 
 pub fn strcmp(s1: [*:0]const u8, s2: [*:0]const u8) i32 {

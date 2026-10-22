@@ -26,12 +26,21 @@ pub fn run() void {
             if (stdio.strcmp(buffer[0..pos :0], "ver") == 0) {
                 stdio.kprint("TinosZE version: ");
                 stdio.kprint(@import("../utils/VersionUtils.zig").GetOsVersion());
+
                 stdio.kprint("Zig version: ");
                 stdio.kprint(@import("../utils/VersionUtils.zig").GetZigVersion());
+
                 stdio.kprint("Serial driver version: ");
                 stdio.kprint(@import("../utils/VersionUtils.zig").GetSerialDriverVersion());
+
                 stdio.kprint("Keyboard driver version: ");
                 stdio.kprint(@import("../utils/VersionUtils.zig").GetKeyboardDriverVersion());
+
+                stdio.kprint("Physical Memory Manager version: ");
+                stdio.kprint(@import("../utils/VersionUtils.zig").GetPmmVersion());
+
+                stdio.kprint("Virtual Memory Manager version: ");
+                stdio.kprint(@import("../utils/VersionUtils.zig").GetVmmVersion());
             } else if (stdio.strcmp(buffer[0..pos :0], "help") == 0) {
                 stdio.kprint("Available commands:");
                 stdio.kprint("ver - Show version information");
@@ -43,13 +52,19 @@ pub fn run() void {
                 while (true) {
                     asm volatile ("cli; hlt");
                 }
+            } else if (stdio.strcmp(buffer[0..pos :0], "meminfo") == 0) {
+                @import("../commands/meminfo.zig").meminfo();
             } else {
-                stdio.kprint("Unknown command: ");
-                stdio.kprint(buffer[0..pos :0]);
+                if (pos > 0) {
+                    stdio.kprint("Unknown command: ");
+                    stdio.kprint(buffer[0..pos :0]);
+                }
             }
 
             pos = 0;
             buffer[0] = 0;
+
+            stdio.putChar('>');
         } else if (c != 0 and pos < buffer.len - 1) {
             buffer[pos] = c;
             pos += 1;

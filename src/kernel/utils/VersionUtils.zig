@@ -1,7 +1,7 @@
 const stdio = @import("../lib/std/stdio.zig");
 
 pub fn GetOsVersion() []const u8 {
-    return "0.1 alpha2";
+    return "0.1 alpha3 DEV1";
 }
 
 pub fn GetZigVersion() []const u8 {
@@ -14,4 +14,12 @@ pub fn GetSerialDriverVersion() []const u8 {
 
 pub fn GetKeyboardDriverVersion() []const u8 {
     return "0.1 alpha";
+}
+
+pub fn GetPmmVersion() []const u8 {
+    return "0.1 alpha";
+}
+
+pub fn GetVmmVersion() []const u8 {
+    return "NOT IMPLEMENTED, Coming soon!";
 }
