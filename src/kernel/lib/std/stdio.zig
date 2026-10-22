@@ -130,3 +130,8 @@ pub fn strcmp(s1: [*:0]const u8, s2: [*:0]const u8) i32 {
 
     return @as(i32, p1[0]) - @as(i32, p2[0]);
 }
+
+pub fn kprintln(str: []const u8) void {
+    kprint(str);
+    putChar('\n');
+}
